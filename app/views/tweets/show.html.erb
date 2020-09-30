@@ -1,0 +1,75 @@
+<%= stylesheet_link_tag "tweetshow", :media => "all" %>
+<header>
+  <h1>Out Booook</h1>
+  <div class="header-list">
+  <ul>
+    <li><%= link_to "投稿一覧へ", tweets_path %></li>
+    <li><%= link_to "編集する", edit_user_registration_path %></li>
+    <li><%= link_to 'ログアウト', destroy_user_session_path, method: :delete %></li>
+  </ul>
+  </div>
+</header>
+
+
+<h3 class="text-center font-weight-bold pt-5 pb-5">投稿詳細</h3>
+
+<div class="tweet mx-auto pb-3" style="width: 200px;">
+  
+  <%= image_tag @tweet.image_url, size: "200x200" if @tweet.image? %>
+</div>
+  <div class="container pt-3">
+  <div class="row pt-3">
+    <div class="col-md-3">
+
+    </div>
+    <div class="col-md-6">
+  <p>投稿内容：<%= @tweet.body %></p>
+
+  <h3>いいね件数: <%= @tweet.likes.count %></h3>
+<% if current_user.already_liked?(@tweet) %>
+<%=link_to tweet_like_path(@tweet), method: :delete do%>
+<i class="fas fa-heart"></i>
+      <%= @tweet.likes.count%>
+ <%end%>
+     <% else %>
+      <%=link_to tweet_likes_path(@tweet), method: :post do%>
+      <i class="far fa-heart"></i>
+       <%= @tweet.likes.count%>
+　　   <%end%>
+     <% end %>
+
+<div class="space pt-4">
+<h2>いいねしたユーザー</h2>
+<% @tweet.liked_users.each do |user| %>
+  <li><%= user.email %></li>
+<% end %>
+</div>
+
+<div class="space pt-4">
+  <p>コメント一覧</p>
+  <% @comments.each do |c| %>
+    <div>
+      <%= c.user.email unless c.user.blank? %>
+      <br>
+      <%= c.comment %>
+    </div>
+      <br>
+  <% end %>
+  </div>
+
+  <% if user_signed_in? %>
+    <%= form_with(model: [@tweet, @comment], local: true) do |f| %>
+      <%= f.text_area :comment%>
+      <%= button_tag type: "submit" do %>
+        <i class="far fa-comments"></i> コメントする
+      <% end %>
+    <% end %>
+  <% end %>
+
+</div>
+    <div class="col-md-3">
+
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,58 @@
+<%= stylesheet_link_tag "tweets", :media => "all" %>
+<header>
+  <h1>Out Booook</h1>
+  <div class="header-list">
+  <ul>
+    <li><%= link_to "新規投稿へ", new_tweet_path %></li>
+    <li><%= link_to "マイページへ", user_path(current_user.id) %></li>
+    <li><%=  link_to 'ログアウト', destroy_user_session_path, method: :delete %></li>
+  </ul>
+  </div>
+</header>
+
+
+
+<div class="tweets-container">
+    <h3 class="text-center font-weight-bold pt-5">投稿一覧</h3>
+
+<div class="search">
+    <%= form_tag({controller:"tweets",action:"index"}, method: :get) do %>
+    <%= text_field_tag :search %>
+    <%= submit_tag '検索する', class: "btn btn-primary"  %>
+    <% end %>
+
+
+
+    <%= page_entries_info @tweets %>
+</div>
+</div>
+
+
+
+
+<% @tweets.each do |t| %>
+
+<div class="parent">
+  <div class="card mx-auto" style="width: 300px;">
+  <%= image_tag t.image_url, size: "300x400" if t.image? %>
+  <div class="card-body">
+  <p><%= t.body %></p>
+  <div class="btn-group">
+                  <button type="button"  class="btn btn-sm btn-outline-secondary"><%= link_to "詳細へ", tweet_path(t.id) %> </button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary"><% if user_signed_in? && current_user.id == t.user_id %> 
+              <div class="delete"><%= link_to "編集する", edit_tweet_path(t.id) %> <% end %> </button>
+                  <% if user_signed_in? && current_user.id == t.user_id %> <%= button_to "削除する", tweet_path(t.id), class: "btn btn-sm btn-primary btn-block", method: :delete %>
+                 
+            <% end %> </div>
+            <p class="time mx-auto pt-3"><%= t.created_at.strftime("%Y-%m-%d %H:%M") %></p>
+                </div>
+  </div>
+  </div>
+</div>
+
+    <% end %>
+
+  
+
+  <div class="pagend"><%= paginate @tweets %></div>
+ 

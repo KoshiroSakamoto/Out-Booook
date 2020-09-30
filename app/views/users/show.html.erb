@@ -1,0 +1,30 @@
+<%= stylesheet_link_tag "show", :media => "all" %>
+<header>
+  <h1>Out Booook</h1>
+  <div class="header-list">
+  <ul>
+    <li><%= link_to "投稿一覧", tweets_path %></li>
+    <% if current_user.id == @user.id %>
+    <li><%= link_to "編集する", edit_user_registration_path %></li>
+    <% end %>
+    <li><%= link_to 'ログアウト', destroy_user_session_path, method: :delete %></li>
+  </ul>
+  </div>
+</header>
+
+<h1 class="text-center font-weight-bold pt-5">マイページ</h1>
+
+<div class="card mx-auto" style="width: 300px;">
+  <%= image_tag @user.image_url, size: "300x200" if @user.image? %>
+  <div class="card-body">
+    <p>名前 : <%= @user.name %></p>
+    <p>プロフィール : <%= @user.profile %></p>
+    
+
+  </div>
+</div>
+
+
+
+
+
